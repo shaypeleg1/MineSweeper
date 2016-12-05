@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Mine Sweeper</title>
+        <link rel="shortcut icon" href="img/game_icon.ico" />
+        <link href="https://fonts.googleapis.com/css?family=Josefin+Sans|Orbitron" rel="stylesheet">
+        <link rel="stylesheet" href="css/myStyle.css">
+    </head>
+    <body onload="initGame()" background="img/bImg.jpg">
+        <h1>Mine Sweeper Game!</h1>
+        <h2>Like the good old days</h2>
+        <div class="counter" id="time"></div>
+        <button class="smiley" onclick="initGame()">
+            <img id="smiley_img" src="img/smiley_def.jpg" alt="smiley face">
+        </button>
+        <div class="counter" id="mines"></div>
+        <table>
+            <tbody class="mineBoard" oncontextmenu="return false;"></tbody>
+        </table>
+        <script src="js/utils.js"></script>
+        <script src="js/main.js"></script>    
+    </body>
+</html>
