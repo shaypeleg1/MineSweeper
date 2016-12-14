@@ -1,5 +1,5 @@
 'use strict';
-var gLevel = {size : 11, mines : 16};
+var gLevel = {size : 11, mines : 2};
 var gBoard;
 var gCellsLeft = 0;
 var timeEl = document.querySelector('#time');
@@ -37,7 +37,6 @@ function cellClicked(cell) {
                 break;
             case 'empty':
                 autoReveal(cell);
-                revealCell(cell);
                 if (gCellsLeft === 0) {
                    gameWin();
                 }
@@ -78,46 +77,34 @@ function cellMarked(cell) {
         cellObj.flagged = false;
     }
 }
-
 // Reveal the cells near the specific cell
 function autoReveal(cell) {
     var cellCoord = getCellCoord(cell.id);
     var cellI = cellCoord.i;
     var cellJ = cellCoord.j;
-    for (var i =cellI-1; i <= cellI+1; i++) {
-        for (var j =cellJ-1; j <= cellJ+1; j++) {
-            if ( i === cellI && j === cellJ ) continue;
-            if ( i < 0 || i > gBoard.length-1) continue;
-            if ( j < 0 || j > gBoard[0].length-1) continue;
-            if (gBoard[i][j].contain !== 'mine' &&
-                gBoard[i][j].flagged === false &&
-                gBoard[i][j].visible === false) {
-                // var tdId = 'cell-' + i + '-' +j;
-                var tdCell = document.querySelector('#cell-' + i + '-' +j);
-                revealCell(tdCell);
-                if (gBoard[i][j].contain === 'empty') {
-                    LevelTwoReveal(i,j);
-                }
-            }
+    recReveal(cellI,cellJ);
+
+    function recReveal(i,j) {
+        if(isOutOfBounds(i, j) || isFilled(i, j)){
+            return;
+        }
+        var tdCell = document.querySelector('#cell-' + i + '-' +j);
+        revealCell(tdCell);
+        if (gBoard[i][j].contain === 'empty') {
+        recReveal(i - 1,j);
+        recReveal(i,j + 1);
+        recReveal(i + 1,j);
+        recReveal(i,j - 1);
         }
     }
 }
-// level 2 cells reveal
-function LevelTwoReveal(i,j) {
-    for (var t =i-1; t <= i+1; t++) {
-        for (var k =j-1; k <= j+1; k++) {
-            if ( t === i && k === j ) continue;
-            if ( t < 0 || t > gBoard.length-1) continue;
-            if ( k < 0 || k > gBoard[0].length-1) continue;
-            if (gBoard[t][k].contain !== 'mine' && 
-                gBoard[t][k].flagged === false &&
-                gBoard[t][k].visible === false) {
-                var tdSecoundCell = document.querySelector('#cell-' + t + '-' +k);
-                revealCell(tdSecoundCell);
-            }
-        }
-    }
+function isOutOfBounds(i, j){
+    return i < 0 || gLevel.size === i || j < 0 || gLevel.size === j;
 }
+function isFilled(i, j){
+    return gBoard[i][j].contain === 'mine' || gBoard[i][j].flagged === true || gBoard[i][j].visible === true
+}
+
 // Builds the game bord with obj and images.
 function buildBoard(size,minesAmount) {
     var board = [];
