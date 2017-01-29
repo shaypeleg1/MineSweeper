@@ -1,5 +1,5 @@
 'use strict';
-var gLevel = {size : 11, mines : 2};
+var gLevel = {size : 11, mines : 16};
 var gBoard;
 var gCellsLeft = 0;
 var timeEl = document.querySelector('#time');
